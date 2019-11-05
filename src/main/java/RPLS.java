@@ -3,15 +3,17 @@ import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-public class RPLS extends Application {
+public class RPLS /**extends Application**/ {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		launch(args);
+		//launch(args);
+		Client nn= new Client();
+		nn.start();
 	}
 
 	//feel free to remove the starter code from this method
-	@Override
+	/*@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
 		primaryStage.setTitle("RPLS!!!");
@@ -19,6 +21,6 @@ public class RPLS extends Application {
 		Scene scene = new Scene(new HBox(),600,600);
 		primaryStage.setScene(scene);
 		primaryStage.show();
-	}
+	}*/
 
 }
