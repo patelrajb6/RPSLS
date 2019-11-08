@@ -4,14 +4,26 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class Client extends Thread {
-Socket socketClient;
-	
+	Socket socketClient;
+	GameInfo info;
 	ObjectOutputStream out;
 	ObjectInputStream in;
 	
+	String ipAddr;
+	int portNum;
+	
+	
+	Client(String ip, String port)
+	{
+		try {
+			   ipAddr = ip;
+			   portNum = Integer.parseInt(port) ;
+			}catch(Exception e){}
+		info= new GameInfo();
+	}
 	public void run() {
 		try {
-			socketClient= new Socket("173.167.129.37",5555);
+			socketClient= new Socket(ipAddr,portNum);
 		    out = new ObjectOutputStream(socketClient.getOutputStream());
 		    in = new ObjectInputStream(socketClient.getInputStream());
 		    socketClient.setTcpNoDelay(true);
@@ -21,18 +33,18 @@ Socket socketClient;
 			while(true) {
 				 
 				try {
-				String message = in.readObject().toString();
+				info = (GameInfo)in.readObject();
+				send(new GameInfo());
 				
 				}
 				catch(Exception e) {}
 			}
 			
-		
 	}
-	public void send(String data) {
+	public void send(GameInfo info) {
 		
 		try {
-			out.writeObject(data);
+			out.writeObject(info);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

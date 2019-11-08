@@ -1,7 +1,11 @@
 import java.io.Serializable;
-import java.util.ArrayList;
-
+import java.util.HashMap;
+import java.util.Map;
 public class GameInfo implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int  playerScore1;    //keeping count of games player 1 won
 	private int playerScore2;	  // keeping count of games player 2 won
 	private Boolean player1Connection;	//checking if the connection is made by player1 or not
@@ -11,31 +15,51 @@ public class GameInfo implements Serializable {
 	private String player1Choice;		//what player 1 played
 	private String player2Choice;		//what player 2 played
 	private Boolean PlayAgain1,PlayAgain2;		//bools to check if both wants to play again or not
-	private int totalGames;
-	enum Choices
-	{
-		Rock, Paper, Scissors, Lizard, Spock
-	}
+	int totalGames;
+//	private HashMap<String, Integer> map= new HashMap<>(); 
+//	map["Scissor"]=0;
+//	map["Rock"]=1;	//Rock defeats lizard[3] and Scissor[2]
+//	map["Paper"]=1;   //Paper can cover Rock[0] and covers spock[4]
+//	map["Lizard"]=3;
+//	map["Spock"]=4;
+	
+	
 	
 	GameInfo()		//initializing all the data members
 	{
+		
 		playerScore1=0;
 		playerScore2=0;
 		player1Connection=false;
 		player2Connection=false;
 		player1Name="none";
 		player2Name="none";
-		player1Choice=" no choice";
-		player2Choice=" no choice";
+		player1Choice="a";
+		player2Choice="a";
 		PlayAgain1= false;
 		PlayAgain2=false;
 		totalGames=0;
 	}
-	
+
+	void setEqual(GameInfo game)
+	{
+		playerScore1=game.getPlayer1Scores();
+		playerScore2=game.getPlayer2Scores();
+		player1Connection=game.getPlayer1Connection();
+		player2Connection=game.getPlayer2Connection();
+		player1Name=game.getPlayer1Name();
+		player2Name=game.getPlayer2Name();
+		player1Choice=game.getPlayer1Choice();
+		player2Choice=game.getPlayer2Choice();
+		PlayAgain1= game.getPlayAgainPlayer1();
+		PlayAgain2=game.getPlayAgainPlayer2();
+		totalGames=game.totalGames;
+	}
 	
 	
 	
 	//setters
+	
 	
 	void setPlayer1Scores(int score1)
 	{
@@ -43,7 +67,7 @@ public class GameInfo implements Serializable {
 	}
 	void setPlayer2Scores(int score2)
 	{
-		this.playerScore1= score2;
+		this.playerScore2= score2;
 	}
 	void setPlayer1Choice(String score1)
 	{
@@ -89,7 +113,7 @@ public class GameInfo implements Serializable {
 	}
 	int getPlayer2Scores()
 	{
-		return this.playerScore1;
+		return this.playerScore2;
 	}
 	String getPlayer1Choice()
 	{
@@ -139,13 +163,47 @@ public class GameInfo implements Serializable {
 	
 	String evaluate()
 	{
+		this.totalGames++;
+		if(player1Choice.equals("a")|| player2Choice.equals("a"))
+			return "waiting";
+		if(player1Choice.equals(player2Choice))
+			return "Draw";
+		if(player1Choice.equals("Scissors") && (player2Choice.equals("Paper")|| player2Choice.equals("Lizard")))
+		{
+			this.setPlayer1Scores(getPlayer1Scores()+1);
+			return player1Name;
+		}
+		if(player1Choice.equals("Paper") && (player2Choice.equals("Rock")|| player2Choice.equals("Spock")))
+		{
+			this.setPlayer1Scores(getPlayer1Scores()+1);
+			return player1Name;
+		}
+		if(player1Choice.equals("Rock") && (player2Choice.equals("Scissors")|| player2Choice.equals("Lizard")))
+		{
+			this.setPlayer1Scores(getPlayer1Scores()+1);
+			return player1Name;
+		}
+		if(player1Choice.equals("Lizard") && (player2Choice.equals("Spock")|| player2Choice.equals("Paper")))
+		{
+			this.setPlayer1Scores(getPlayer1Scores()+1);
+			return player1Name;
+		}
+		if(player1Choice.equals("Spock") && (player2Choice.equals("Scissors")|| player2Choice.equals("Rock")))
+		{
+			this.setPlayer1Scores(getPlayer1Scores()+1);
+			return player1Name;
+		}
 		
-		return "none";
+		
+		else
+		{
+			this.setPlayer2Scores(getPlayer2Scores()+1);
+			return player2Name;
+		}
+			
+		
+		
 	}
-	void updateScores(int score1, int score2)
-	{
-		this.setPlayer1Scores(score1);
-		this.setPlayer2Scores(score2);
-	}
+	
 
 }
