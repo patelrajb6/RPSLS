@@ -16,6 +16,8 @@ public class GameInfo implements Serializable {
 	private String player2Choice;		//what player 2 played
 	private Boolean PlayAgain1,PlayAgain2;		//bools to check if both wants to play again or not
 	int totalGames;
+	int rounds;
+	Boolean client1, client2;
 //	private HashMap<String, Integer> map= new HashMap<>(); 
 //	map["Scissor"]=0;
 //	map["Rock"]=1;	//Rock defeats lizard[3] and Scissor[2]
@@ -39,8 +41,25 @@ public class GameInfo implements Serializable {
 		PlayAgain1= false;
 		PlayAgain2=false;
 		totalGames=0;
+		rounds=0;
+		client1=false;
+		client2=false;
 	}
-
+	void reset()
+	{
+		playerScore1=0;
+		playerScore2=0;
+		player1Connection=false;
+		player2Connection=false;
+		player1Name="none";
+		player2Name="none";
+		player1Choice="a";
+		player2Choice="a";
+		PlayAgain1= false;
+		PlayAgain2=false;
+		client1=false;
+		client2=false;
+	}
 	void setEqual(GameInfo game)
 	{
 		playerScore1=game.getPlayer1Scores();
@@ -54,6 +73,7 @@ public class GameInfo implements Serializable {
 		PlayAgain1= game.getPlayAgainPlayer1();
 		PlayAgain2=game.getPlayAgainPlayer2();
 		totalGames=game.totalGames;
+		rounds=game.rounds;
 	}
 	
 	
@@ -160,47 +180,67 @@ public class GameInfo implements Serializable {
 			return true;			//then they can start the game
 		return false;    //else wait or terminate
 	}
-	
-	String evaluate()
+	Boolean PlayAgain()
 	{
-		this.totalGames++;
+		if(this.PlayAgain1 && this.PlayAgain2)
+			return true;
+		return false;
+	}
+	String evaluate()		//function which evaluates the choices
+	{
+		this.totalGames++;  //increments the total count of the game
 		if(player1Choice.equals("a")|| player2Choice.equals("a"))
-			return "waiting";
-		if(player1Choice.equals(player2Choice))
+			return "waiting";					//if the other player has not yet played
+		if(player1Choice.equals(player2Choice))		//if both the choices are same
+		{
+			rounds++;
 			return "Draw";
+			
+		}
+			//the rest is the  game logic
 		if(player1Choice.equals("Scissors") && (player2Choice.equals("Paper")|| player2Choice.equals("Lizard")))
 		{
+			
 			this.setPlayer1Scores(getPlayer1Scores()+1);
+			
 			return player1Name;
 		}
 		if(player1Choice.equals("Paper") && (player2Choice.equals("Rock")|| player2Choice.equals("Spock")))
 		{
+			
 			this.setPlayer1Scores(getPlayer1Scores()+1);
+			
 			return player1Name;
 		}
 		if(player1Choice.equals("Rock") && (player2Choice.equals("Scissors")|| player2Choice.equals("Lizard")))
 		{
+			
 			this.setPlayer1Scores(getPlayer1Scores()+1);
+			
 			return player1Name;
 		}
 		if(player1Choice.equals("Lizard") && (player2Choice.equals("Spock")|| player2Choice.equals("Paper")))
 		{
+			
 			this.setPlayer1Scores(getPlayer1Scores()+1);
+			
 			return player1Name;
 		}
 		if(player1Choice.equals("Spock") && (player2Choice.equals("Scissors")|| player2Choice.equals("Rock")))
 		{
+			
 			this.setPlayer1Scores(getPlayer1Scores()+1);
+			
 			return player1Name;
 		}
 		
-		
 		else
 		{
+			
 			this.setPlayer2Scores(getPlayer2Scores()+1);
+			
 			return player2Name;
 		}
-			
 		
 		
 	}
